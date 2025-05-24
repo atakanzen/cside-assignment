@@ -8,6 +8,9 @@ export const Route = createRootRouteWithContext<{
 }>()({
 	component: () => (
 		<RelayEnvironmentProvider environment={relayEnvironment}>
+			<div className="fixed w-screen h-12 bg-purple-200 flex items-center p-4">
+				<h1 className="text-2xl font-bold">GitSherlocked</h1>
+			</div>
 			<Outlet />
 			<TanStackRouterDevtools />
 		</RelayEnvironmentProvider>

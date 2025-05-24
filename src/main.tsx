@@ -4,6 +4,8 @@ import ReactDOM from "react-dom/client";
 
 import { routeTree } from "./routeTree.gen";
 
+import { Theme } from "@radix-ui/themes";
+import "@radix-ui/themes/styles.css";
 import reportWebVitals from "./reportWebVitals.ts";
 import "./styles.css";
 import relayEnvironment from "./utils/relay/environment.ts";
@@ -31,7 +33,9 @@ if (rootElement && !rootElement.innerHTML) {
 	const root = ReactDOM.createRoot(rootElement);
 	root.render(
 		<StrictMode>
-			<RouterProvider router={router} />
+			<Theme>
+				<RouterProvider router={router} />
+			</Theme>
 		</StrictMode>,
 	);
 }
