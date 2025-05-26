@@ -1,9 +1,14 @@
+import { useAppDispatch, useAppState } from "@/context/useAppContext";
 import { MagnifyingGlassIcon } from "@radix-ui/react-icons";
 import { TextField } from "@radix-ui/themes";
-import { useState } from "react";
 
 const Searchbar = () => {
-	const [searchInput, setSearchInput] = useState<string>("");
+	const state = useAppState();
+	const dispatch = useAppDispatch();
+
+	const handleChange: React.ChangeEventHandler<HTMLInputElement> = (e) => {
+		dispatch({ type: "searchInputChange", payload: e.target.value });
+	};
 
 	return (
 		<TextField.Root
@@ -13,8 +18,8 @@ const Searchbar = () => {
 			color="purple"
 			type="search"
 			variant="soft"
-			value={searchInput}
-			onChange={(e) => setSearchInput(e.target.value)}
+			value={state.repoSearchInput}
+			onChange={handleChange}
 		>
 			<TextField.Slot>
 				<MagnifyingGlassIcon />

@@ -1,5 +1,4 @@
-import SearchResultList from "@/components/SearchResultList";
-import Searchbar from "@/components/Searchbar";
+import SearchContainer from "@/components/SearchContainer";
 import { createFileRoute } from "@tanstack/react-router";
 import { graphql, loadQuery, usePreloadedQuery } from "react-relay";
 import type { routesQuery } from "../utils/relay/__generated__/routesQuery.graphql";
@@ -31,11 +30,7 @@ function App() {
 
 	return (
 		<div className="w-screen h-screen flex items-center justify-center">
-			<div className="flex flex-col gap-y-4 h-full justify-center">
-				<Searchbar />
-				{/* Once Data From Searchbar query show here as a list. */}
-				<SearchResultList />
-			</div>
+			<SearchContainer />
 		</div>
 	);
 }
