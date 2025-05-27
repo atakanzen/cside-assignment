@@ -1,13 +1,29 @@
-import { useAppDispatch, useAppState } from "@/context/useAppContext";
+import type { SearchResultListQuery$variables } from "@/utils/relay/__generated__/SearchResultListQuery.graphql";
 import { MagnifyingGlassIcon } from "@radix-ui/react-icons";
-import { TextField } from "@radix-ui/themes";
+import { IconButton, TextField } from "@radix-ui/themes";
+import {
+	type ChangeEventHandler,
+	type KeyboardEventHandler,
+	memo,
+} from "react";
+import type { UseQueryLoaderLoadQueryOptions } from "react-relay";
 
-const Searchbar = () => {
-	const state = useAppState();
-	const dispatch = useAppDispatch();
+interface SearchbarProps {
+	value: string;
+	onChange: (value: string) => void;
+	onPressEnter: (
+		variables: SearchResultListQuery$variables,
+		options?: UseQueryLoaderLoadQueryOptions | undefined,
+	) => void;
+}
 
-	const handleChange: React.ChangeEventHandler<HTMLInputElement> = (e) => {
-		dispatch({ type: "searchInputChange", payload: e.target.value });
+const Searchbar = ({ value, onChange, onPressEnter }: SearchbarProps) => {
+	const handleChange: ChangeEventHandler<HTMLInputElement> = (e) => {
+		onChange(e.target.value);
+	};
+
+	const handleOnKeyDown: KeyboardEventHandler<HTMLInputElement> = (e) => {
+		if (e.key === "Enter") onPressEnter({ query: value });
 	};
 
 	return (
@@ -18,14 +34,17 @@ const Searchbar = () => {
 			color="purple"
 			type="search"
 			variant="soft"
-			value={state.repoSearchInput}
+			value={value}
 			onChange={handleChange}
+			onKeyDown={handleOnKeyDown}
 		>
-			<TextField.Slot>
-				<MagnifyingGlassIcon />
+			<TextField.Slot side="right">
+				<IconButton variant="ghost" className="hover:cursor-pointer!">
+					<MagnifyingGlassIcon />
+				</IconButton>
 			</TextField.Slot>
 		</TextField.Root>
 	);
 };
 
-export default Searchbar;
+export default memo(Searchbar);
