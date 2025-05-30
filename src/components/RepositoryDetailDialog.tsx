@@ -111,7 +111,6 @@ const RepositoryDetailDialog = ({
 						<h3 className="text-lg font-semibold mb-2">Description</h3>
 						<p>{repository.description}</p>
 					</div>
-					{/* Collaborators section now uses the Collaborators component */}
 					<div>
 						<h3 className="text-lg font-semibold mb-2">Collaborators</h3>
 						<Collaborators repositoryRef={repository} />

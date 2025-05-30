@@ -3,7 +3,7 @@ import { Button } from "@radix-ui/themes";
 import { graphql, usePaginationFragment } from "react-relay";
 
 interface IssuesListProps {
-	issueRef: IssuesList_issue$key; // Replace `any` with the generated fragment type if available
+	issueRef: IssuesList_issue$key;
 }
 
 const IssuesList = ({ issueRef }: IssuesListProps) => {

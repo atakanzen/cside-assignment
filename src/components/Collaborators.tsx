@@ -43,7 +43,6 @@ const Collaborators = ({ repositoryRef }: CollaboratorsProps) => {
 	for (const edge of edges) {
 		const author = edge?.node?.author;
 		if (author) {
-			// Prefer login from a User type; fallback to email if no login exists.
 			const key = author.name || author.email;
 			if (key && !authorMap.has(key)) {
 				authorMap.set(key, {
