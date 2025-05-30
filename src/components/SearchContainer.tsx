@@ -1,5 +1,5 @@
 import type { SearchResultListQuery } from "@/utils/relay/__generated__/SearchResultListQuery.graphql";
-import { useState } from "react";
+import { Suspense, useState } from "react";
 import { useQueryLoader } from "react-relay";
 import SearchResultList, { SearchQuery } from "./SearchResultList";
 import Searchbar from "./Searchbar";
@@ -17,7 +17,11 @@ const SearchContainer = () => {
 				onChange={setSearchInput}
 				onPressEnter={loadQuery}
 			/>
-			{queryRef && <SearchResultList queryRef={queryRef} />}
+			{queryRef && (
+				<Suspense fallback={<div>Loading...</div>}>
+					<SearchResultList queryRef={queryRef} />
+				</Suspense>
+			)}
 		</div>
 	);
 };

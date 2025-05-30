@@ -1,6 +1,6 @@
 import SearchContainer from "@/components/SearchContainer";
 import { createFileRoute } from "@tanstack/react-router";
-import { graphql, loadQuery, usePreloadedQuery } from "react-relay";
+import { graphql, loadQuery } from "react-relay";
 import type { routesQuery } from "../utils/relay/__generated__/routesQuery.graphql";
 
 const INDEX_QUERY = graphql`
@@ -25,9 +25,6 @@ export const Route = createFileRoute("/")({
 });
 
 function App() {
-	const preloadedQuery = Route.useLoaderData();
-	const data = usePreloadedQuery<routesQuery>(INDEX_QUERY, preloadedQuery);
-
 	return (
 		<div className="w-screen h-screen flex items-center justify-center">
 			<SearchContainer />
