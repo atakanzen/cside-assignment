@@ -1,8 +1,13 @@
 import { formatStargazerCount } from "@/utils/helpers";
+import type { SearchResultListMutation } from "@/utils/relay/__generated__/SearchResultListMutation.graphql";
 import type { SearchResultListQuery } from "@/utils/relay/__generated__/SearchResultListQuery.graphql";
 import { StarFilledIcon } from "@radix-ui/react-icons";
 import { useState } from "react";
-import { type PreloadedQuery, usePreloadedQuery } from "react-relay";
+import {
+	type PreloadedQuery,
+	useMutation,
+	usePreloadedQuery,
+} from "react-relay";
 import { graphql } from "relay-runtime";
 import RepositoryDetailDialog from "./RepositoryDetailDialog";
 
@@ -18,11 +23,25 @@ export const SearchQuery = graphql`
 						login
 					} 
           stargazerCount,
+					viewerHasStarred
 					...RepositoryDetailDialog_repository
         }
       }
     }
   }
+`;
+
+const repoLikeMutation = graphql`
+	mutation SearchResultListMutation($input: AddStarInput!) {
+		addStar(input: $input) {
+			clientMutationId
+			starrable {
+				... on Repository {
+					viewerHasStarred
+				}
+			}
+		}
+	}
 `;
 
 interface SearchResultListProps {
@@ -37,6 +56,9 @@ const SearchResultList = ({ queryRef }: SearchResultListProps) => {
 		| null
 	>(null);
 
+	const [commitMutation, isMutationOnFlight] =
+		useMutation<SearchResultListMutation>(repoLikeMutation);
+
 	if (!data.search.nodes) return;
 
 	const handleRepoClick = (
@@ -45,6 +67,16 @@ const SearchResultList = ({ queryRef }: SearchResultListProps) => {
 		>[number],
 	) => {
 		setSelectedRepo(repo);
+	};
+
+	const handleStarClick = (id: string) => {
+		commitMutation({
+			variables: {
+				input: {
+					starrableId: id,
+				},
+			},
+		});
 	};
 
 	return (
@@ -73,7 +105,10 @@ const SearchResultList = ({ queryRef }: SearchResultListProps) => {
 								</div>
 								<div className="flex items-center justify-center gap-1">
 									<span>{formatStargazerCount(repo.stargazerCount)}</span>
-									<StarFilledIcon color="purple" />
+									<StarFilledIcon
+										color={`${repo.viewerHasStarred ? "green" : "red"}`}
+										onClick={() => handleStarClick(repo.id ?? "")}
+									/>
 								</div>
 							</button>
 						</li>
